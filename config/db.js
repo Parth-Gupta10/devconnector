@@ -16,7 +16,7 @@ const db = config.get('mongoURI');
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true}) //these options passed to clear deprecation warnings
+    await mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false}) //these options passed to clear depreciation warnings
     console.log('Mongoose connected');
   } catch (err) {
     console.log(err);

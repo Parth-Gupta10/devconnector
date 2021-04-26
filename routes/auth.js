@@ -8,7 +8,7 @@ const config = require('config');
 const {check, validationResult} = require('express-validator');
 
 //Route - GET Auth
-//Access - Public
+//Access - Private
 
 //Made this route protected by adding middleware, used to get info of user after verifying the JSON web token
 //from the user that is authenticate them
