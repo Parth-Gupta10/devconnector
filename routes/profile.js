@@ -179,5 +179,75 @@ router.delete('/', auth, async (req, res) => {
   }
 });
 
+// @route    PUT profile/experience
+// @desc     Add profile experience
+// @access   Private
+
+router.put('/experience', [auth, [
+  check('title', 'title is required').not().isEmpty(),
+  check('company', 'company is required').not().isEmpty(),
+  check('from', 'from date is required').not().isEmpty()
+]], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description
+  } = req.body;
+
+  const newExp = {
+    title: title,
+    company: company,
+    location: location,
+    from: from,
+    to: to,
+    current: current,
+    description: description
+  }
+
+  try {
+    const profile = await Profile.findOne({ user: req.user.id});
+
+    profile.experience.unshift(newExp); //unshift similar to push but it pushes value at beginning of array
+
+    await profile.save();
+    res.json(profile);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('server error')
+  }
+
+});
+
+// @route    DELETE profile/experience/:exp_id
+// @desc     Delete exp from profile by exp id
+// @access   Private
+
+router.delete('/experience/:exp_id', auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id});
+
+    // Get remove index - find index of exp to be removed in array
+    const removeIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id);
+
+    //splice to remove item at the index found
+    profile.experience.splice(removeIndex, 1);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error")
+  }
+})
 
 module.exports = router;
