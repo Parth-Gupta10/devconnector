@@ -250,6 +250,58 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
   }
 });
 
+// @route    PUT profile/experience/:exp_id
+// @desc     Update exp from profile by exp id
+// @access   Private
+
+router.put('/experience/:exp_id', [auth, [
+  check('title', 'title is required').not().isEmpty(),
+  check('company', 'company is required').not().isEmpty(),
+  check('from', 'from date is required').not().isEmpty()
+]], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const {
+    title,
+    company,
+    location,
+    from,
+    to,
+    current,
+    description
+  } = req.body;
+
+  const newExp = {
+    title: title,
+    company: company,
+    location: location,
+    from: from,
+    to: to,
+    current: current,
+    description: description
+  }
+
+  try {
+    const profile = await Profile.findOne({ user: req.user.id});
+
+    // Get update index - find index of exp to be updated in array
+    const updateIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id);
+
+    //splice to remove item at the index found and then add item at than index
+    profile.experience.splice(updateIndex, 1, newExp);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error")
+  }
+});
+
 // @route    PUT profile/education
 // @desc     Add profile education
 // @access   Private
@@ -312,6 +364,59 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
 
     //splice to remove item at the index found
     profile.education.splice(removeIndex, 1);
+
+    await profile.save();
+
+    res.json(profile);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Server Error")
+  }
+});
+
+// @route    PUT profile/education/:edu_id
+// @desc     Update edu from profile by edu id
+// @access   Private
+
+router.put('/education/:edu_id', [auth, [
+  check('school', 'School is required').not().isEmpty(),
+  check('degree', 'Degree is required').not().isEmpty(),
+  check('fieldofstudy', 'Field of Study is required').not().isEmpty(),
+  check('from', 'from date is required').not().isEmpty()
+]], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const {
+    school,
+    degree,
+    fieldofstudy,
+    from,
+    to,
+    current,
+    description
+  } = req.body;
+
+  const newEdu = {
+    school: school,
+    degree: degree,
+    fieldofstudy: fieldofstudy,
+    from: from,
+    to: to,
+    current: current,
+    description: description
+  }
+
+  try {
+    const profile = await Profile.findOne({ user: req.user.id});
+
+    // Get update index - find index of edu to be updated in array
+    const updateIndex = profile.education.map(item => item.id).indexOf(req.params.edu_id);
+
+    //splice to remove item at the index found and then add item at than index
+    profile.education.splice(updateIndex, 1, newEdu);
 
     await profile.save();
 
