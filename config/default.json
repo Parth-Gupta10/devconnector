@@ -1,4 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://parth1003:parth1003@devconnector-mern.etrwp.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "heywhyareyoureadingthis"
-}
