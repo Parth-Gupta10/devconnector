@@ -16,7 +16,8 @@
     "gravatar": "^1.8.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.5",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "normalize-url": "^6.0.0"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",

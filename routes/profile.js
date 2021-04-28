@@ -6,6 +6,8 @@ const User = require('../models/User');
 const { check, validationResult } = require('express-validator');
 const fetch = require('node-fetch');
 const config = require('config');
+// bring in normalize to give us a proper url, regardless of what user entered
+const normalize = require('normalize-url');
 
 //Route - GET profile/me
 //desc - Get current user's profile 
@@ -67,7 +69,7 @@ router.post(
       profileFields.company = company;
     }
     if (website) {
-      profileFields.website = website;
+      profileFields.website = website === '' ? '' : normalize(website, { forceHttps: true });
     }
     if (location) {
       profileFields.location = location;
@@ -430,7 +432,7 @@ router.put('/education/:edu_id', [auth, [
 });
 
 // @route    GET profile/github/:username
-// @desc     Get user repos from github 
+// @desc     Get user repos from github using username
 // @access   Public
 
 router.get('/github/:username', (req, res) => {

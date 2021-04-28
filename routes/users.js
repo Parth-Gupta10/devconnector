@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const {check, validationResult} = require('express-validator');
 const User = require('../models/User');
+// bring in normalize to give us a proper url, regardless of what user entered
+const normalize = require('normalize-url');
 
 //Route - POST users
 //description - Register user
@@ -52,12 +54,15 @@ router.post('/', [
       });
     }
 
-    // Get gravatar of user
-    const avatar = gravatar.url(email, {
-      s: '200',
-      r: 'pg',
-      d: 'mm'
-    })
+    // Get gravatar of user. Added normalize here to fix broken links in gravatar, it is an unresolved issue with this package.
+    const avatar = normalize(
+      gravatar.url(email, {
+        s: '200',
+        r: 'pg',
+        d: 'mm'
+      }),
+      { forceHttps: true }
+    );
 
     // creating a user
     user = new User({
