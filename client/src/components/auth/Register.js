@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import {Link} from 'react-router-dom'
-
-const Register = () => {
+import PropTypes from 'prop-types'
+import {Link} from 'react-router-dom';
+//Redux
+import {connect} from 'react-redux'
+import setAlert from '../../actions/alert'
+const Register = (props) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -19,7 +22,8 @@ const Register = () => {
       const onSubmit = (e) => {
           e.preventDefault();
           if (password !== password2) {
-              console.log("Password do not match");
+              //here 'password do not match' and 'danger' will be passed as 'msg' and 'alertType' to alert.js in actions
+              props.setAlert("Password do not match", 'danger');
           } else {
               console.log(formData);
           }
@@ -85,4 +89,11 @@ const Register = () => {
     )
 }
 
-export default Register
+Register.propTypes = {
+    setAlert: PropTypes.func.isRequired,
+}
+
+//The connect() function connects a React component to a Redux store. 
+//It provides its connected component with the pieces of the data it needs from the store, and the functions it can use to dispatch actions to the store.
+//connect takes in 2 things, first any state you wanna match and second is an object with any action you want
+export default connect(null, { setAlert })(Register)
