@@ -4,7 +4,8 @@ import {Link} from 'react-router-dom';
 //Redux
 import {connect} from 'react-redux'
 import setAlert from '../../actions/alert'
-const Register = (props) => {
+import {register} from '../../actions/auth'
+const Register = ({setAlert, register}) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -23,9 +24,9 @@ const Register = (props) => {
           e.preventDefault();
           if (password !== password2) {
               //here 'password do not match' and 'danger' will be passed as 'msg' and 'alertType' to alert.js in actions
-              props.setAlert("Password do not match", 'danger');
+              setAlert("Password do not match", 'danger');
           } else {
-              console.log(formData);
+              register({name, email, password});
           }
       }
         
@@ -42,7 +43,8 @@ const Register = (props) => {
                         name="name" 
                         value={name}
                         onChange={e => onChange(e)}
-                        required />
+                        required 
+                    />
                 </div>
                 <div className="form-group">
                     <input 
@@ -51,7 +53,8 @@ const Register = (props) => {
                         value={email}
                         onChange={e => onChange(e)}
                         name="email" 
-                        required />
+                        required 
+                    />
                     <small className="form-text">
                         This site uses Gravatar so if you want a profile image, use a
                         Gravatar email
@@ -80,7 +83,8 @@ const Register = (props) => {
                 <input 
                     type="submit" 
                     className="btn btn-primary" 
-                    value="Register" />
+                    value="Register" 
+                />
             </form>
             <p className="my-1">
                 Already have an account? <Link to="/login">Sign In</Link>
@@ -91,9 +95,10 @@ const Register = (props) => {
 
 Register.propTypes = {
     setAlert: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired
 }
 
 //The connect() function connects a React component to a Redux store. 
 //It provides its connected component with the pieces of the data it needs from the store, and the functions it can use to dispatch actions to the store.
 //connect takes in 2 things, first any state you wanna match and second is an object with any action you want
-export default connect(null, { setAlert })(Register)
+export default connect(null, { setAlert, register })(Register)
