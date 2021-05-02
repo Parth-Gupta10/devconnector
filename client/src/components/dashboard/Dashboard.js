@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import DashboardActions from './DashboardActions'
+import Experience from './Experience';
+import Education from './Education';
 //Redux
 import { connect } from 'react-redux';
 import { getCurrentProfile } from '../../actions/profile'
@@ -22,6 +24,9 @@ const Dashboard = ({ auth: { user }, profile: { profile, loading }, getCurrentPr
             {profile !== null ? (
                 <Fragment>
                     <DashboardActions />
+                    {/* sending props to child elements "Education" and "Experience" */}
+                    <Experience experience={profile.experience} />
+                    <Education education={profile.education} />
                 </Fragment>
             ) : (
                 <Fragment>
