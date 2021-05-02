@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const Profile = require('../models/Profile');
 const User = require('../models/User');
+const Post = require('../models/Post');
 const { check, validationResult } = require('express-validator');
 const fetch = require('node-fetch');
 const config = require('config');
@@ -16,12 +17,12 @@ const normalize = require('normalize-url');
 router.get('/me', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id }).populate(
-      'user', 
+      'user',
       ['name', 'avatar']
     );
 
     if (!profile) {
-      return res.status(400).json({ msg: 'There is no profile for this user'});
+      return res.status(400).json({ msg: 'There is no profile for this user' });
     }
 
     res.json(profile);
@@ -47,11 +48,11 @@ router.post(
     }
 
     // destructure the request
-    const { 
-      company, 
-      website, 
-      location, 
-      bio, 
+    const {
+      company,
+      website,
+      location,
+      bio,
       status,
       githubusername,
       skills,
@@ -105,12 +106,12 @@ router.post(
     }
 
     try {
-      let profile = await Profile.findOne({ user: req.user.id});
+      let profile = await Profile.findOne({ user: req.user.id });
 
       if (profile) {
         //update profile as profile already exists
         profile = await Profile.findOneAndUpdate(
-          { user: req.user.id}, { $set: profileFields}, {new: true}
+          { user: req.user.id }, { $set: profileFields }, { new: true }
         );
 
         return res.json(profile);
@@ -120,7 +121,7 @@ router.post(
       profile = new Profile(profileFields);
       await profile.save();
       res.json(profile)
-      
+
     } catch (err) {
       console.log(err);
       res.status(500).send('server error');
@@ -146,10 +147,10 @@ router.get('/', async (req, res) => {
 // @access   Public
 router.get('/user/:user_id', async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.params.user_id}).populate('user', ['name', 'avatar']);
-    
+    const profile = await Profile.findOne({ user: req.params.user_id }).populate('user', ['name', 'avatar']);
+
     if (!profile) {
-      return res.status(400).json({ msg: 'No profile found'})
+      return res.status(400).json({ msg: 'No profile found' })
     }
 
     res.json(profile);
@@ -157,7 +158,7 @@ router.get('/user/:user_id', async (req, res) => {
     //if the id is wrong (that is length is more) the response is "server error" but we would like to return 
     //no user found in that case also. This is a particular error that is present to solve this situation
     if (err.kind == 'ObjectId') {
-      return res.status(400).json({msg: 'No profile found'})
+      return res.status(400).json({ msg: 'No profile found' })
     }
     console.log(err);
     res.status(500).send('server error')
@@ -169,14 +170,15 @@ router.get('/user/:user_id', async (req, res) => {
 // @access   Private
 router.delete('/', auth, async (req, res) => {
   try {
-    //@todo - remove users posts
+    // Remove all posts of user
+    await Post.deleteMany({ user: req.user.id });
 
     // Remove profile
-    await Profile.findOneAndRemove({ user: req.user.id});
+    await Profile.findOneAndRemove({ user: req.user.id });
     //then remove User
-    await User.findOneAndRemove({ _id: req.user.id});
+    await User.findOneAndRemove({ _id: req.user.id });
 
-    res.json({msg: 'User deleted successfully'});
+    res.json({ msg: 'User deleted successfully' });
   } catch (err) {
     console.log(err);
     res.status(500).send('server error')
@@ -218,7 +220,7 @@ router.put('/experience', [auth, [
   }
 
   try {
-    const profile = await Profile.findOne({ user: req.user.id});
+    const profile = await Profile.findOne({ user: req.user.id });
 
     profile.experience.unshift(newExp); //unshift similar to push but it pushes value at beginning of array
 
@@ -237,7 +239,7 @@ router.put('/experience', [auth, [
 
 router.delete('/experience/:exp_id', auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id});
+    const profile = await Profile.findOne({ user: req.user.id });
 
     // Get remove index - find index of exp to be removed in array
     const removeIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id);
@@ -289,7 +291,7 @@ router.put('/experience/:exp_id', [auth, [
   }
 
   try {
-    const profile = await Profile.findOne({ user: req.user.id});
+    const profile = await Profile.findOne({ user: req.user.id });
 
     // Get update index - find index of exp to be updated in array
     const updateIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id);
@@ -342,7 +344,7 @@ router.put('/education', [auth, [
   }
 
   try {
-    const profile = await Profile.findOne({ user: req.user.id});
+    const profile = await Profile.findOne({ user: req.user.id });
 
     profile.education.unshift(newEdu); //unshift similar to push but it pushes value at beginning of array
 
@@ -361,7 +363,7 @@ router.put('/education', [auth, [
 
 router.delete('/education/:edu_id', auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id});
+    const profile = await Profile.findOne({ user: req.user.id });
 
     // Get remove index - find index of exp to be removed in array
     const removeIndex = profile.education.map(item => item.id).indexOf(req.params.edu_id);
@@ -414,7 +416,7 @@ router.put('/education/:edu_id', [auth, [
   }
 
   try {
-    const profile = await Profile.findOne({ user: req.user.id});
+    const profile = await Profile.findOne({ user: req.user.id });
 
     // Get update index - find index of edu to be updated in array
     const updateIndex = profile.education.map(item => item.id).indexOf(req.params.edu_id);
@@ -446,20 +448,20 @@ router.get('/github/:username', (req, res) => {
       Authorization: `token ${config.get('githubToken')}`
     };
 
-    fetch(uri, {headers})
-    .then(res => res.json())
-    .then((body) => {
-      if (body.message == 'Not Found') {
-        res.status(404).json({ msg: "No profile found"})
-      } else {
-        res.json(body);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(404).json({ msg: "No profile found"})
-    })
-    
+    fetch(uri, { headers })
+      .then(res => res.json())
+      .then((body) => {
+        if (body.message == 'Not Found') {
+          res.status(404).json({ msg: "No profile found" })
+        } else {
+          res.json(body);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).json({ msg: "No profile found" })
+      })
+
   } catch (err) {
     console.log(err);
     res.status(500).send("Server Error");
