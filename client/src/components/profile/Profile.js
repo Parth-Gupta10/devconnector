@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { getProfileById } from '../../actions/profile';
 
 //props.match.params.id will give id from the URL, we destructured props to guve match.
-const Profile = ({ getProfileById, profile: { profile }, auth, match }) => {
+const Profile = ({ getProfileById, profile: { profile, loading }, auth, match }) => {
 
     useEffect(() => {
         getProfileById(match.params.id);
@@ -20,7 +20,7 @@ const Profile = ({ getProfileById, profile: { profile }, auth, match }) => {
 
     return (
         <Fragment>
-            {profile === null ? (
+            {profile === null || loading ? (
                 <Spinner />
             ) : (
                 <Fragment>
@@ -90,7 +90,7 @@ Profile.propTypes = {
 
 //We are using auth here because we need give edit profile functionality too here i.e check if person logged in is same person
 //whose profile he can edit
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     profile: state.profile,
     auth: state.auth
 });
