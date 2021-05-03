@@ -1,4 +1,4 @@
-import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST } from '../actions/types';
+import { GET_POSTS, POST_ERROR, UPDATE_LIKES, DELETE_POST, ADD_POST } from '../actions/types';
 
 const initialState = {
     posts: [],
@@ -17,6 +17,12 @@ export default function postReducer(state = initialState, actions) {
                 posts: payload,
                 loading: false
             }
+        case ADD_POST:
+            return {
+                ...state,
+                posts: [payload, ...state.posts],
+                loading: false
+            };
         case DELETE_POST:
             //return all posts whose id does NOT match with the ID of post sent via payload i.e the post to be deleted
             return {
