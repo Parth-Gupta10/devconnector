@@ -62,7 +62,7 @@ const Login = ({ login, isAuthenticated }) => {
                     value="Login" />
             </form>
             <p className="my-1">
-                Don't have an account? <Link to="/register">Sign In</Link>
+                Don't have an account? <Link to="/register">Sign Up</Link>
             </p>
         </Fragment>
     )
