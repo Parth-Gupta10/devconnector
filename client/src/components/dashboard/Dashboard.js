@@ -10,9 +10,10 @@ import { connect } from 'react-redux';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
 
 const Dashboard = ({ auth: { user }, profile: { profile, loading }, getCurrentProfile, deleteAccount }) => {
+
     useEffect(() => {
         getCurrentProfile();
-    }, [])
+    }, [getCurrentProfile])
 
     return loading && profile === null ? (
         <Spinner />) : (
