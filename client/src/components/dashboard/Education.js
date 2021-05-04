@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
+import { Link } from 'react-router-dom'
 //Redux
 import { connect } from 'react-redux';
 import { deleteEducation } from '../../actions/profile';
@@ -20,7 +21,15 @@ const Education = ({ education, deleteEducation }) => {
                 )}
             </td>
             <td>
-                <button onClick={() => deleteEducation(edu._id)} className='btn btn-danger'>Delete</button>
+                <button onClick={() => deleteEducation(edu._id)} className='btn btn-danger'>
+                    <i className="far fa-trash-alt"></i> <span className="hide-sm">Delete</span>
+                </button>
+            </td>
+            <td>
+                {/* To send props via Link we use 'to' object */}
+                <Link to={{ pathname: '/edit-education', eduId: edu._id }} className='btn btn-success'>
+                    <i className="far fa-edit"></i> <span className="hide-sm">Edit</span>
+                </Link>
             </td>
         </tr>
     ));
@@ -34,6 +43,7 @@ const Education = ({ education, deleteEducation }) => {
                         <th>School</th>
                         <th className='hide-sm'>Degree</th>
                         <th className='hide-sm'>Years</th>
+                        <th className="hide-sm" />
                         <th />
                     </tr>
                 </thead>

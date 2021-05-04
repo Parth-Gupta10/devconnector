@@ -72,8 +72,8 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
             <h1 className='large text-primary'>Create Your Profile</h1>
             <p className='lead'>
                 <i className='fas fa-user' /> Let's get some information to make your
-        profile stand out
-      </p>
+                profile stand out
+            </p>
             <small>* = required field</small>
             <form className='form' onSubmit={e => onSubmit(e)}>
                 <div className='form-group'>
@@ -90,7 +90,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
                     </select>
                     <small className='form-text'>
                         Give us an idea of where you are at in your career
-          </small>
+                    </small>
                 </div>
                 <div className='form-group'>
                     <input
@@ -102,7 +102,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
                     />
                     <small className='form-text'>
                         Could be your own company or one you work for
-          </small>
+                    </small>
                 </div>
                 <div className='form-group'>
                     <input
@@ -114,7 +114,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
                     />
                     <small className='form-text'>
                         Could be your own or a company website
-          </small>
+                    </small>
                 </div>
                 <div className='form-group'>
                     <input
@@ -126,7 +126,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
                     />
                     <small className='form-text'>
                         City & state suggested (eg. Boston, MA)
-          </small>
+                    </small>
                 </div>
                 <div className='form-group'>
                     <input
@@ -138,7 +138,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
                     />
                     <small className='form-text'>
                         Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)
-          </small>
+                    </small>
                 </div>
                 <div className='form-group'>
                     <input
@@ -151,7 +151,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
                     <small className='form-text'>
                         If you want your latest repos and a Github link, include your
                         username
-          </small>
+                    </small>
                 </div>
                 <div className='form-group'>
                     <textarea
@@ -170,7 +170,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
                         className='btn btn-light'
                     >
                         Add Social Network Links
-          </button>
+                    </button>
                     <span>Optional</span>
                 </div>
 

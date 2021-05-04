@@ -109,6 +109,62 @@ export const addEducation = (formData, history) => async (dispatch) => {
     }
 };
 
+//Update experience by exp ID
+export const updateExperience = (expId, formData, history) => async dispatch => {
+    try {
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const res = await axios.put(`/profile/experience/${expId}`, formData, config)
+
+        dispatch({
+            type: UPDATE_PROFILE,
+            payload: res.data
+        })
+
+        dispatch(setAlert('Experience Updated', 'success'));
+
+        history.push('/dashboard');
+    } catch (err) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+}
+
+//Update education by exp ID
+export const updateEducation = (eduId, formData, history) => async dispatch => {
+    try {
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+
+        const res = await axios.put(`/profile/education/${eduId}`, formData, config)
+
+        dispatch({
+            type: UPDATE_PROFILE,
+            payload: res.data
+        })
+
+        dispatch(setAlert('Education Updated', 'success'));
+
+        history.push('/dashboard');
+    } catch (err) {
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: { msg: err.response.statusText, status: err.response.status }
+        });
+    }
+}
+
 // Delete experience
 export const deleteExperience = id => async dispatch => {
     try {
