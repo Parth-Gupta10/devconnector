@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const {check, validationResult} = require('express-validator');
+const { check, validationResult } = require('express-validator');
 
 //Route - GET Auth
 //Access - Private
@@ -50,8 +50,6 @@ router.post('/', [
       email: email
     });
 
-    console.log(user);
-
     if (!user) {
       return res.status(400).json({
         errors: [{
@@ -81,12 +79,12 @@ router.post('/', [
     jwt.sign(
       payload,
       config.get('jwtSecret'),
-      {expiresIn: 360000},
+      { expiresIn: 360000 },
       (err, token) => {
 
-      if(err) throw err;
-      res.json({token});
-    })
+        if (err) throw err;
+        res.json({ token });
+      })
 
   } catch (e) {
     console.log(e);
