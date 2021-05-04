@@ -41,6 +41,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
             youtube: loading || !profile.social ? '' : profile.social.youtube,
             instagram: loading || !profile.social ? '' : profile.social.instagram
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading, getCurrentProfile]);
 
     const {

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import PropTypes from 'prop-types';
@@ -30,8 +30,9 @@ const CommentItem = ({
                     onClick={() => deleteComment(postId, _id)}
                     type='button'
                     className='btn btn-danger'
+                    style={{ padding: '0.15rem 0.4rem' }}
                 >
-                    <i className='fas fa-times' />
+                    <i className='fas fa-trash' />
                 </button>
             )}
         </div>

@@ -70,7 +70,7 @@ const CreateProfile = ({ createProfile, history }) => {
                     </select>
                     <small className="form-text">
                         Give us an idea of where you are at in your career
-          </small>
+                    </small>
                 </div>
                 <div className="form-group">
                     <input
