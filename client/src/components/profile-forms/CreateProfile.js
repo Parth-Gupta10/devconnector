@@ -14,6 +14,7 @@ const CreateProfile = ({ createProfile, history }) => {
         status: '',
         skills: '',
         githubusername: '',
+        includeForks: false,
         bio: '',
         twitter: '',
         facebook: '',
@@ -31,6 +32,7 @@ const CreateProfile = ({ createProfile, history }) => {
         status,
         skills,
         githubusername,
+        includeForks,
         bio,
         twitter,
         facebook,
@@ -131,6 +133,19 @@ const CreateProfile = ({ createProfile, history }) => {
                     <small className="form-text">
                         If you want your latest repos and a Github link, include your
                         username
+                    </small>
+                </div>
+                <div className='form-group'>
+                    <input
+                        type='checkbox'
+                        name='includeForks'
+                        checked={includeForks}
+                        value={includeForks}
+                        onChange={() => setFormData({ ...formData, includeForks: !includeForks })}
+                    />{' '}
+                        Include Forks
+                    <small className='form-text'>
+                        If you want to include forks in repositories listed on your profile
                     </small>
                 </div>
                 <div className="form-group">

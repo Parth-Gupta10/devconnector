@@ -28,6 +28,10 @@ const ProfileSchema = new mongoose.Schema({
   githubusername: {
     type: String,
   },
+  includeForks: {
+    type: Boolean,
+    default: false
+  },
   experience: [
     {
       title: {

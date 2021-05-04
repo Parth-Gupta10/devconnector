@@ -55,6 +55,7 @@ router.post(
       bio,
       status,
       githubusername,
+      includeForks,
       skills,
       youtube,
       facebook,
@@ -84,6 +85,7 @@ router.post(
     if (githubusername) {
       profileFields.githubusername = githubusername;
     }
+    profileFields.includeForks = includeForks;
     if (skills) {
       profileFields.skills = skills.split(',').map(skill => skill.trim());
     }
@@ -437,10 +439,11 @@ router.put('/education/:edu_id', [auth, [
 // @desc     Get user repos from github using username
 // @access   Public
 
-router.get('/github/:username', (req, res) => {
+router.get('/github/:username', auth, async (req, res) => {
   try {
+    const profile = await Profile.findOne({ user: req.user.id });
     const uri = encodeURI(
-      `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc`
+      `https://api.github.com/users/${req.params.username}/repos?sort=created:asc`
     );
 
     const headers = {
@@ -454,7 +457,14 @@ router.get('/github/:username', (req, res) => {
         if (body.message == 'Not Found') {
           res.status(404).json({ msg: "No profile found" })
         } else {
-          res.json(body);
+          if (profile.includeForks) {
+            //slice to get only 5 repos
+            return res.json(body.slice(0, 5));
+          } else {
+            //to get repos without fork, also slice to get only 5 repos
+            const finalRepos = body.filter(repo => repo.fork === false).slice(0, 5);
+            return res.json(finalRepos);
+          }
         }
       })
       .catch((err) => {

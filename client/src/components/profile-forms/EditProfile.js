@@ -13,6 +13,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
         status: '',
         skills: '',
         githubusername: '',
+        includeForks: false,
         bio: '',
         twitter: '',
         facebook: '',
@@ -32,8 +33,8 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
             location: loading || !profile.location ? '' : profile.location,
             status: loading || !profile.status ? '' : profile.status,
             skills: loading || !profile.skills ? '' : profile.skills.join(','),
-            githubusername:
-                loading || !profile.githubusername ? '' : profile.githubusername,
+            githubusername: loading || !profile.githubusername ? '' : profile.githubusername,
+            includeForks: loading || !profile.includeForks ? false : profile.includeForks,
             bio: loading || !profile.bio ? '' : profile.bio,
             twitter: loading || !profile.social ? '' : profile.social.twitter,
             facebook: loading || !profile.social ? '' : profile.social.facebook,
@@ -51,6 +52,7 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
         status,
         skills,
         githubusername,
+        includeForks,
         bio,
         twitter,
         facebook,
@@ -151,6 +153,19 @@ const EditProfile = ({ profile: { profile, loading }, createProfile, getCurrentP
                     <small className='form-text'>
                         If you want your latest repos and a Github link, include your
                         username
+                    </small>
+                </div>
+                <div className='form-group'>
+                    <input
+                        type='checkbox'
+                        name='includeForks'
+                        checked={includeForks}
+                        value={includeForks}
+                        onChange={() => setFormData({ ...formData, includeForks: !includeForks })}
+                    />{' '}
+                        Include Forks
+                    <small className='form-text'>
+                        If you want to include forks in repositories listed on your profile
                     </small>
                 </div>
                 <div className='form-group'>
